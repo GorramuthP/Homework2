@@ -158,28 +158,6 @@ public class Fox extends Animal {
         }
     }
 
-    /**
-     * Generate a number representing the number of births, if it can breed.
-     *
-     * @return The number of births (may be zero).
-     */
-    private int breed() {
-        int births = 0;
-        if (canBreed() && RANDOM.nextDouble() <= BREEDING_PROBABILITY) {
-            births = RANDOM.nextInt(MAX_LITTER_SIZE) + 1;
-        }
-        return births;
-    }
-
-    /**
-     * A fox can breed if it has reached the breeding age.
-     */
-
-
-    /**
-     * Indicate that the fox is no longer alive. It is removed from the field.
-     */
-
     @Override
     protected void setDead() {
         setAlive(false);
@@ -198,6 +176,16 @@ public class Fox extends Animal {
     @Override
     protected int getBreedingAge() {
         return BREEDING_AGE;
+    }
+
+    @Override
+    protected double getBreedingProbability() {
+        return BREEDING_PROBABILITY;
+    }
+
+    @Override
+    protected int getMaxLitterSize() {
+        return MAX_LITTER_SIZE;
     }
 
 }

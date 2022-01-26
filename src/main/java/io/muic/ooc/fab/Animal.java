@@ -1,21 +1,19 @@
 package io.muic.ooc.fab;
 
+import java.util.Random;
+
 public abstract class Animal {
 
     //Constructor TODO
     private int age=0;
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
     private boolean alive=true;
+    private static final Random RANDOM = new Random();
 
     protected abstract void setDead();
-
     protected abstract int getMaxAge();
-
     protected abstract int getBreedingAge();
+    protected abstract double getBreedingProbability();
+    protected abstract int getMaxLitterSize();
 
     public void setAge(int age) {
         this.age = age;
@@ -35,14 +33,21 @@ public abstract class Animal {
     protected boolean canBreed() {
         return getAge() >= getBreedingAge();
     }
+    protected int breed() {
+        int births = 0;
+        if (canBreed() && RANDOM.nextDouble() <= getBreedingProbability()) {
+            births = RANDOM.nextInt(getMaxLitterSize()) + 1;
+        }
+        return births;
+    }
 
-    /**
-     * Check whether the fox is alive or not.
-     *
-     * @return True if the fox is still alive.
-     */
-    //Basically the getter
+
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
     public boolean isAlive() {
         return alive;
     }
+
 }
