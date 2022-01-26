@@ -3,7 +3,7 @@ package io.muic.ooc.fab;
 import java.util.List;
 import java.util.Random;
 
-public class Rabbit {
+public class Rabbit extends Animal {
     // Characteristics shared by all rabbits (class variables).
 
     // The age at which a rabbit can start to breed.
@@ -19,7 +19,6 @@ public class Rabbit {
 
     // Individual characteristics (instance fields).
     // The rabbit's age.
-    private int age;
     // Whether the rabbit is alive or not.
     private boolean alive;
     // The rabbit's position.
@@ -36,12 +35,11 @@ public class Rabbit {
      * @param location The location within the field.
      */
     public Rabbit(boolean randomAge, Field field, Location location) {
-        age = 0;
         alive = true;
         this.field = field;
         setLocation(location);
         if (randomAge) {
-            age = RANDOM.nextInt(MAX_AGE);
+            setAge(RANDOM.nextInt(getMaxAge()));
         }
     }
 
@@ -79,13 +77,19 @@ public class Rabbit {
      * Indicate that the rabbit is no longer alive. It is removed from the
      * field.
      */
-    public void setDead() {
+    @Override
+    protected void setDead() {
         alive = false;
         if (location != null) {
             field.clear(location);
             location = null;
             field = null;
         }
+    }
+
+    @Override
+    protected int getMaxAge() {
+        return MAX_AGE;
     }
 
     /**
@@ -113,12 +117,6 @@ public class Rabbit {
     /**
      * Increase the age. This could result in the rabbit's death.
      */
-    private void incrementAge() {
-        age++;
-        if (age > MAX_AGE) {
-            setDead();
-        }
-    }
 
     /**
      * Check whether or not this rabbit is to give birth at this step. New
@@ -157,6 +155,6 @@ public class Rabbit {
      * @return true if the rabbit can breed, false otherwise.
      */
     private boolean canBreed() {
-        return age >= BREEDING_AGE;
+        return getAge() >= BREEDING_AGE;
     }
 }

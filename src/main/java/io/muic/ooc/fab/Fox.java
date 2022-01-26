@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.Random;
 
-public class Fox {
+public class Fox extends Animal {
     // Characteristics shared by all foxes (class variables).
 
     // The age at which a fox can start to breed.
@@ -23,7 +23,6 @@ public class Fox {
 
     // Individual characteristics (instance fields).
     // The fox's age.
-    private int age;
     // Whether the fox is alive or not.
     private boolean alive;
     // The fox's position.
@@ -42,12 +41,11 @@ public class Fox {
      * @param location The location within the field.
      */
     public Fox(boolean randomAge, Field field, Location location) {
-        age = 0;
         alive = true;
         this.field = field;
         setLocation(location);
         if (randomAge) {
-            age = RANDOM.nextInt(MAX_AGE);
+            setAge(RANDOM.nextInt(getMaxAge()));
             foodLevel = RANDOM.nextInt(RABBIT_FOOD_VALUE);
         } else {
             // leave age at 0
@@ -117,12 +115,6 @@ public class Fox {
     /**
      * Increase the age. This could result in the fox's death.
      */
-    private void incrementAge() {
-        age++;
-        if (age > MAX_AGE) {
-            setDead();
-        }
-    }
 
     /**
      * Make this fox more hungry. This could result in the fox's death.
@@ -193,13 +185,15 @@ public class Fox {
      * A fox can breed if it has reached the breeding age.
      */
     private boolean canBreed() {
-        return age >= BREEDING_AGE;
+        return getAge() >= BREEDING_AGE;
     }
 
     /**
      * Indicate that the fox is no longer alive. It is removed from the field.
      */
-    private void setDead() {
+
+    @Override
+    protected void setDead() {
         alive = false;
         if (location != null) {
             field.clear(location);
@@ -207,4 +201,10 @@ public class Fox {
             field = null;
         }
     }
+
+    @Override
+    protected int getMaxAge() {
+        return MAX_AGE;
+    }
+
 }
