@@ -2,21 +2,21 @@ package io.muic.ooc.fab;
 
 public abstract class Animal {
 
-    public int getAge() {
-        return age;
-    }
-
     private int age=0;
 
     protected abstract void setDead();
 
     protected abstract int getMaxAge();
 
+    protected abstract int getBreedingAge();
+
     public void setAge(int age) {
         this.age = age;
     }
 
-
+    public int getAge() {
+        return age;
+    }
 
     protected void incrementAge(){
         age++;
@@ -25,5 +25,7 @@ public abstract class Animal {
         }
     }
 
-
+    protected boolean canBreed() {
+        return getAge() >= getBreedingAge();
+    }
 }

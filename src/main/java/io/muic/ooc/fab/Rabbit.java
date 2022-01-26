@@ -92,6 +92,11 @@ public class Rabbit extends Animal {
         return MAX_AGE;
     }
 
+    @Override
+    protected int getBreedingAge() {
+        return BREEDING_AGE;
+    }
+
     /**
      * Return the rabbit's location.
      *
@@ -154,7 +159,4 @@ public class Rabbit extends Animal {
      *
      * @return true if the rabbit can breed, false otherwise.
      */
-    private boolean canBreed() {
-        return getAge() >= BREEDING_AGE;
-    }
 }

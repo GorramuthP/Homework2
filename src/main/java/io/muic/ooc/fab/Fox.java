@@ -184,9 +184,7 @@ public class Fox extends Animal {
     /**
      * A fox can breed if it has reached the breeding age.
      */
-    private boolean canBreed() {
-        return getAge() >= BREEDING_AGE;
-    }
+
 
     /**
      * Indicate that the fox is no longer alive. It is removed from the field.
@@ -205,6 +203,11 @@ public class Fox extends Animal {
     @Override
     protected int getMaxAge() {
         return MAX_AGE;
+    }
+
+    @Override
+    protected int getBreedingAge() {
+        return BREEDING_AGE;
     }
 
 }
