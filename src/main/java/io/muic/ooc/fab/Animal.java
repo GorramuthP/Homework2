@@ -9,11 +9,21 @@ public abstract class Animal {
     private boolean alive=true;
     private static final Random RANDOM = new Random();
 
-    protected abstract void setDead();
     protected abstract int getMaxAge();
     protected abstract int getBreedingAge();
     protected abstract double getBreedingProbability();
     protected abstract int getMaxLitterSize();
+    protected Location location;
+    protected Field field;
+
+    public Animal(boolean randomAge, Field field, Location location) {
+        setAlive(true);
+        this.field = field;
+        setLocation(location);
+        if (randomAge) {
+            setAge(RANDOM.nextInt(getMaxAge()));
+        }
+    }
 
     public void setAge(int age) {
         this.age = age;
@@ -50,4 +60,38 @@ public abstract class Animal {
         return alive;
     }
 
+    /**
+     * Return the fox's location.
+     *
+     * @return The fox's location.
+     */
+    public Location getLocation() {
+        return location;
+    }
+
+    /**
+     * Place the fox at the new location in the given field.
+     *
+     * @param newLocation The fox's new location.
+     */
+    protected void setLocation(Location newLocation) {
+        if (location != null) {
+            field.clear(location);
+        }
+        location = newLocation;
+        field.place(this, newLocation);
+    }
+
+    public Field getField() {
+        return field;
+    }
+
+    protected void setDead() {
+        setAlive(false);
+        if (location != null) {
+            field.clear(location);
+            location = null;
+            field = null;
+        }
+    }
 }

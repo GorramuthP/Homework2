@@ -20,13 +20,6 @@ public class Fox extends Animal {
     private static final int RABBIT_FOOD_VALUE = 9;
     // Random generator
     private static final Random RANDOM = new Random();
-
-    // Individual characteristics (instance fields).
-
-    // The fox's position.
-    private Location location;
-    // The field occupied.
-    private Field field;
     // The fox's food level, which is increased by eating rabbits.
     private int foodLevel;
 
@@ -39,15 +32,8 @@ public class Fox extends Animal {
      * @param location The location within the field.
      */
     public Fox(boolean randomAge, Field field, Location location) {
-        this.field = field;
-        setLocation(location);
-        if (randomAge) {
-            setAge(RANDOM.nextInt(getMaxAge()));
-            foodLevel = RANDOM.nextInt(RABBIT_FOOD_VALUE);
-        } else {
-            // leave age at 0
-            foodLevel = RANDOM.nextInt(RABBIT_FOOD_VALUE);
-        }
+        super(randomAge,field,location);
+        foodLevel = RANDOM.nextInt(RABBIT_FOOD_VALUE);
     }
 
     /**
@@ -66,7 +52,7 @@ public class Fox extends Animal {
             Location newLocation = findFood();
             if (newLocation == null) {
                 // No food found - try to move to a free location.
-                newLocation = field.freeAdjacentLocation(location);
+                newLocation = getField().freeAdjacentLocation(getLocation());
             }
             // See if it was possible to move.
             if (newLocation != null) {
@@ -78,37 +64,6 @@ public class Fox extends Animal {
         }
     }
 
-
-
-    /**
-     * Return the fox's location.
-     *
-     * @return The fox's location.
-     */
-    public Location getLocation() {
-        return location;
-    }
-
-    /**
-     * Place the fox at the new location in the given field.
-     *
-     * @param newLocation The fox's new location.
-     */
-    private void setLocation(Location newLocation) {
-        if (location != null) {
-            field.clear(location);
-        }
-        location = newLocation;
-        field.place(this, newLocation);
-    }
-
-    /**
-     * Increase the age. This could result in the fox's death.
-     */
-
-    /**
-     * Make this fox more hungry. This could result in the fox's death.
-     */
     private void incrementHunger() {
         foodLevel--;
         if (foodLevel <= 0) {
@@ -123,11 +78,11 @@ public class Fox extends Animal {
      * @return Where food was found, or null if it wasn't.
      */
     private Location findFood() {
-        List<Location> adjacent = field.adjacentLocations(location);
+        List<Location> adjacent = getField().adjacentLocations(getLocation());
         Iterator<Location> it = adjacent.iterator();
         while (it.hasNext()) {
             Location where = it.next();
-            Object animal = field.getObjectAt(where);
+            Object animal = getField().getObjectAt(where);
             if (animal instanceof Rabbit) {
                 Rabbit rabbit = (Rabbit) animal;
                 if (rabbit.isAlive()) {
@@ -149,24 +104,15 @@ public class Fox extends Animal {
     private void giveBirth(List<Fox> newFoxes) {
         // New foxes are born into adjacent locations.
         // Get a list of adjacent free locations.
-        List<Location> free = field.getFreeAdjacentLocations(location);
+        List<Location> free = getField().getFreeAdjacentLocations(getLocation());
         int births = breed();
         for (int b = 0; b < births && free.size() > 0; b++) {
             Location loc = free.remove(0);
-            Fox young = new Fox(false, field, loc);
+            Fox young = new Fox(false, getField(), loc);
             newFoxes.add(young);
         }
     }
 
-    @Override
-    protected void setDead() {
-        setAlive(false);
-        if (location != null) {
-            field.clear(location);
-            location = null;
-            field = null;
-        }
-    }
 
     @Override
     protected int getMaxAge() {
