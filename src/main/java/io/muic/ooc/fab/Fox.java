@@ -22,9 +22,7 @@ public class Fox extends Animal {
     private static final Random RANDOM = new Random();
 
     // Individual characteristics (instance fields).
-    // The fox's age.
-    // Whether the fox is alive or not.
-    private boolean alive;
+
     // The fox's position.
     private Location location;
     // The field occupied.
@@ -41,7 +39,6 @@ public class Fox extends Animal {
      * @param location The location within the field.
      */
     public Fox(boolean randomAge, Field field, Location location) {
-        alive = true;
         this.field = field;
         setLocation(location);
         if (randomAge) {
@@ -63,7 +60,7 @@ public class Fox extends Animal {
     public void hunt(List<Fox> newFoxes) {
         incrementAge();
         incrementHunger();
-        if (alive) {
+        if (isAlive()) {
             giveBirth(newFoxes);
             // Move towards a source of food if found.
             Location newLocation = findFood();
@@ -81,14 +78,7 @@ public class Fox extends Animal {
         }
     }
 
-    /**
-     * Check whether the fox is alive or not.
-     *
-     * @return True if the fox is still alive.
-     */
-    public boolean isAlive() {
-        return alive;
-    }
+
 
     /**
      * Return the fox's location.
@@ -192,7 +182,7 @@ public class Fox extends Animal {
 
     @Override
     protected void setDead() {
-        alive = false;
+        setAlive(false);
         if (location != null) {
             field.clear(location);
             location = null;
